@@ -5,8 +5,8 @@ from marshmallow import Schema, fields, ValidationError, validates
 from auth.model import Auth
 import jwt, os
 from datetime import datetime, timedelta
-from db import db
 from flask import Blueprint
+from db import db
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -19,7 +19,7 @@ class AuthRegistrationSchema(Schema):
     @validates('email')
     def validate_email(self, value):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
-            raise ValidationError("Invalid email format")
+            raise ValidationError("Your Email Format is Invalid")
         
 @auth_blueprint.route('/registration', methods=['POST'])
 def registration():
