@@ -1,4 +1,5 @@
 from functools import wraps
+import os
 from flask import abort, request
 import jwt
 
@@ -15,16 +16,15 @@ def role_required(required_role):
             token = auth_header.split(" ")[1]
 
             try:
-                decoded_token = jwt.decode(token, 'your_secret_key', algorithms=['HS256'])
+                secret_key = os.getenv('SECRET_KEY')
+                decoded_token = jwt.decode(token, secret_key, algorithms=['HS256'])
                 if 'role' not in decoded_token or decoded_token['role'] != required_role:
                     abort(403)
-
-                kwargs['user'] = decoded_token
 
                 return func(*args, **kwargs)
 
             except jwt.ExpiredSignatureError:
-                abort(401) 
+                abort(401)
             except jwt.InvalidTokenError:
                 abort(401)
 
