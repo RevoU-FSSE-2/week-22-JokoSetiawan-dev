@@ -71,7 +71,7 @@ def login():
     }
 
     response = make_response(jsonify(response_data))
-    response.headers['Authorization'] = token
+    response.headers['Authorization'] = "Bearer" + token
 
     return response
 
