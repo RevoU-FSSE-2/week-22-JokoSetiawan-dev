@@ -10,6 +10,7 @@ psycopg2-binary = "*"
 flask-bcrypt = "*"
 marshmallow = "*"
 pyjwt = "*"
+flask-cors = "*"
 
 [dev-packages]
 
