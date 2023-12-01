@@ -11,6 +11,8 @@ flask-bcrypt = "*"
 marshmallow = "*"
 pyjwt = "*"
 flask-cors = "*"
+docker = "*"
+gunicorn = "*"
 
 [dev-packages]
 
