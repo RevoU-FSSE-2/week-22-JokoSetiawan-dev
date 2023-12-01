@@ -30,5 +30,9 @@ bcrypt.init_app(app)
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
 app.register_blueprint(todo_blueprint, url_prefix="/todolist")
 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+
+
 # with app.app_context():
 #     db_init()
