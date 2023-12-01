@@ -64,6 +64,34 @@ def create_todo():
         'status': new_todo.status
     }, 201
 
+@todo_blueprint.route('/all', methods=['GET'])
+@role_required(UserRole.ADMIN.value)
+def get_all_todo():
+    token_auth = request.headers.get('Authorization')
+    if not token_auth or not token_auth.startswith('Bearer '):
+        return {"error": "Invalid token format"}, 400
+
+    token = token_auth.split(' ')[1]
+
+    try:
+        secret_key = os.getenv('SECRET_KEY')
+        decoded_token = jwt.decode(token, secret_key, algorithms=['HS256'])
+        user_id = decoded_token.get('user_id')
+    except jwt.ExpiredSignatureError:
+        return {"error": "Token has expired"}, 401
+    except jwt.InvalidTokenError:
+        return {"error": "Invalid token"}, 401
+    
+    todos = Todo.query.all()
+
+    if not todos:
+        return {"error": "No todos found for the authenticated user"}, 404
+    
+    response_data = [{"id": todo.id, "todo": todo.todo, "status": todo.status, "user_id": todo.user_id} for todo in todos]
+
+    return {"todolist": response_data}
+
+
 @todo_blueprint.route('', methods=['GET'])
 @role_required(UserRole.USER.value)
 def get_todo_byid():
